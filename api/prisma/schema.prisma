@@ -9,33 +9,61 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
-  posts Post[]
+
+enum Rank {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+  MASTER
+  GRANDMASTER
+  TOP500
 }
 
-Enum Rank {
-  A
-  B
-  C
+enum Performance {
+  LEVELUP
+  LEVELDOWN
+  DRAW
 }
 
-model Post {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+enum Role {
+  TANK
+  DAMAGE
+  SUPPORT
+  FLEX
 }
 
 model Task {
   id String @id @default(cuid())
-  rank String
+  rank Rank
+  performance Performance
+  role Role
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  seasonId String?
+  season Season? @relation(fields: [seasonId], references: [id])
+
+  @@map("tasks")
+}
+
+model Season {
+  id String @id @default(cuid())
+  season String @unique
+  description String
+  initialRank Rank
+  finalRank Rank
+  seasonEnd DateTime
+
+  tasks Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("seasons")
 }
