@@ -55,7 +55,6 @@ model Task {
 model Season {
   id String @id @default(cuid())
   season String @unique
-  description String
   initialRank Rank
   finalRank Rank
   seasonEnd DateTime
