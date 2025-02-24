@@ -37,11 +37,50 @@ enum Role {
   FLEX
 }
 
+enum ExecutionTime {
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum TaskType {
+  REFACT
+  FEATURE
+  FIX
+}
+
+enum Impact {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Autonomy {
+  MIN_HELP
+  MAX_HELP
+  INDEPENDENT
+}
+
+enum Challenge {
+  EASY
+  MEDIUM
+  HARD
+  NIGHTMARE
+}
+
 model Task {
   id String @id @default(cuid())
-  rank Rank
+  title String
+  rank Rank?
   performance Performance
   role Role
+  executionTime ExecutionTime
+  planningTime Boolean
+  taskType TaskType
+  impactProduct Impact
+  impactTeam Impact
+  autonomy Autonomy
+  challenge Challenge
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -55,8 +94,8 @@ model Task {
 model Season {
   id String @id @default(cuid())
   season String @unique
-  initialRank Rank
-  finalRank Rank
+  initialRank Rank @default(BRONZE)
+  finalRank Rank?
   seasonEnd DateTime
 
   tasks Task[]

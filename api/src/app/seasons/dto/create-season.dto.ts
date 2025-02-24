@@ -1,20 +1,25 @@
 import { Rank } from '@prisma/client';
-import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateSeasonDto {
   @IsNotEmpty()
   @IsString()
   season: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(Rank)
   initialRank: Rank;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(Rank)
   finalRank: Rank;
 
   @IsNotEmpty()
-  @IsDate()
-  seasonEnd: Date;
+  seasonEnd: Date | string;
 }
